@@ -8,29 +8,30 @@ import uz.sankha.task.models.Form;
 import uz.sankha.task.repositorys.TableRepository;
 import uz.sankha.task.repositorys.TableTwoRepository;
 
+import javax.management.Query;
 import java.util.Calendar;
 import java.util.Date;
 
 @Controller
 public class TableTwoController {
     @Autowired
-    private final TableRepository tableRepository;
+    private final TableTwoRepository tableTwoRepository;
 
-    public TableTwoController(TableRepository tableRepository) {
-        this.tableRepository = tableRepository;
+    public TableTwoController(TableTwoRepository tableTwoRepository) {
+        this.tableTwoRepository = tableTwoRepository;
     }
 
     @GetMapping("/tabletwo")
     public String tabletwo(Model model){
         Date datein=new Date();
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, -3);
+        cal.add(Calendar.MONTH, 0);
         Date dateto = cal.getTime();
 
         System.out.println("today:"+dateto+"- end:"+datein);
-        Iterable<Form> forms = tableRepository.findByRegdateBetweenAndCorrespondentAndDeliveryform(dateto,datein,2,1);
+        Iterable<Form> forms = tableTwoRepository.findByRegdateBetweenAndCorrespondentNotLikeOrDeliveryformNotLike(dateto,dateto,2,1);
         model.addAttribute("forms", forms);
-        return "tableone";
+        return "tabletwo";
 
     }
 }
